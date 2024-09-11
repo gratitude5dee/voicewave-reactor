@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RefreshCw, Download, Mic, Settings, Plus } from 'lucide-react';
 import SpeedEmotionPopup from './SpeedEmotionPopup';
 import MixVoicesPopup from './MixVoicesPopup';
@@ -22,7 +23,6 @@ const VoiceCloner = ({ onNewAudio }) => {
   const [isCloneVoiceOpen, setIsCloneVoiceOpen] = useState(false);
 
   const handleSpeak = () => {
-    // Implement speak functionality
     onNewAudio(voice, text);
   };
 
@@ -52,6 +52,17 @@ const VoiceCloner = ({ onNewAudio }) => {
           </Button>
         </div>
         <div className="flex space-x-2">
+          <Select value={voice} onValueChange={setVoice}>
+            <SelectTrigger className="w-[200px] bg-gray-800 border-gray-700 text-white">
+              <SelectValue placeholder="Select a voice" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Aiden">Aiden</SelectItem>
+              <SelectItem value="Emma">Emma</SelectItem>
+              <SelectItem value="Liam">Liam</SelectItem>
+              <SelectItem value="Olivia">Olivia</SelectItem>
+            </SelectContent>
+          </Select>
           <Input
             value={text}
             onChange={(e) => setText(e.target.value)}
