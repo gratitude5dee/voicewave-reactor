@@ -38,7 +38,7 @@ const VoiceControls = ({ voices, onSpeak, onMixVoices, onSpeedEmotion }) => {
         <Button 
           onClick={handleSpeak} 
           className="bg-purple-600 hover:bg-purple-700 text-white transition-all duration-300 hover:shadow-lg hover:scale-105" 
-          disabled={!voice || !text}
+          disabled={!voice || !text.trim()}
         >
           <Mic className="mr-2 h-4 w-4" /> Speak
         </Button>
