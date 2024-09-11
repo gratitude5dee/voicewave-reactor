@@ -34,13 +34,15 @@ const VoiceCloner = ({ onNewAudio }) => {
 
   const resizeObserverCallback = useCallback((entries) => {
     for (let entry of entries) {
-      const height = entry.contentRect.height;
-      const downloadButton = entry.target.querySelector('#download-button');
-      if (downloadButton) {
-        const buttonBottom = downloadButton.offsetTop + downloadButton.offsetHeight;
-        const minHeight = buttonBottom + 10; // 10px below the download button
-        if (height < minHeight) {
-          entry.target.style.height = `${minHeight}px`;
+      if (entry.target === bottomPanelRef.current) {
+        const height = entry.contentRect.height;
+        const downloadButton = entry.target.querySelector('#download-button');
+        if (downloadButton) {
+          const buttonBottom = downloadButton.offsetTop + downloadButton.offsetHeight;
+          const minHeight = buttonBottom + 10; // 10px below the download button
+          if (height < minHeight) {
+            entry.target.style.height = `${minHeight}px`;
+          }
         }
       }
     }
