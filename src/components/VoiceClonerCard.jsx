@@ -12,8 +12,8 @@ const VoiceClonerCard = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [voices, setVoices] = useState(['Aiden', 'Emma', 'Liam', 'Olivia']);
 
-  const handleNewAudio = (voice, text, speedEmotion) => {
-    setAudioHistory(prev => [...prev, { voice, text, speedEmotion }]);
+  const handleNewAudio = (voice, text, speedEmotion, mixedVoices) => {
+    setAudioHistory(prev => [...prev, { voice, text, speedEmotion, mixedVoices }]);
   };
 
   const handleDeleteAudio = (index) => {

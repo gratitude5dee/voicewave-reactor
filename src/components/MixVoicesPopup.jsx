@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2, ChevronUp, ChevronDown } from 'lucide-react';
 
-const MixVoicesPopup = ({ isOpen, onClose, voices }) => {
+const MixVoicesPopup = ({ isOpen, onClose, voices, onSave }) => {
   const [isMixingEnabled, setIsMixingEnabled] = useState(false);
   const [mixedVoices, setMixedVoices] = useState([
     { id: 1, name: '', percentage: 50 },
@@ -35,6 +35,15 @@ const MixVoicesPopup = ({ isOpen, onClose, voices }) => {
     newVoices[index] = newVoices[index + direction];
     newVoices[index + direction] = temp;
     setMixedVoices(newVoices);
+  };
+
+  const handleSave = () => {
+    if (isMixingEnabled) {
+      onSave(mixedVoices);
+    } else {
+      onSave(null);
+    }
+    onClose();
   };
 
   return (
@@ -94,6 +103,7 @@ const MixVoicesPopup = ({ isOpen, onClose, voices }) => {
               Add to mix
             </Button>
           )}
+          <Button onClick={handleSave} className="mt-4">Save</Button>
         </div>
       </DialogContent>
     </Dialog>

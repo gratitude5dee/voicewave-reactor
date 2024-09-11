@@ -23,6 +23,7 @@ const VoiceCloner = ({ onNewAudio, voices = [] }) => {
   const [isMixVoicesOpen, setIsMixVoicesOpen] = useState(false);
   const [isCloneVoiceOpen, setIsCloneVoiceOpen] = useState(false);
   const [speedEmotion, setSpeedEmotion] = useState(null);
+  const [mixedVoices, setMixedVoices] = useState(null);
   const bottomPanelRef = useRef(null);
 
   useEffect(() => {
@@ -33,13 +34,18 @@ const VoiceCloner = ({ onNewAudio, voices = [] }) => {
 
   const handleSpeak = () => {
     if (voice && text) {
-      onNewAudio(voice, text, speedEmotion);
+      onNewAudio(voice, text, speedEmotion, mixedVoices);
     }
   };
 
   const handleDownload = () => {
     // Implement download functionality
     console.log('Download functionality not implemented yet');
+  };
+
+  const handleMixVoices = (mixedVoicesData) => {
+    setMixedVoices(mixedVoicesData);
+    setIsMixVoicesOpen(false);
   };
 
   const resizeObserverCallback = useCallback((entries) => {
@@ -173,6 +179,7 @@ const VoiceCloner = ({ onNewAudio, voices = [] }) => {
         isOpen={isMixVoicesOpen} 
         onClose={() => setIsMixVoicesOpen(false)} 
         voices={voices}
+        onSave={handleMixVoices}
       />
       <CloneVoicePopup isOpen={isCloneVoiceOpen} onClose={() => setIsCloneVoiceOpen(false)} />
     </ResizablePanelGroup>
