@@ -20,24 +20,22 @@ const AudioHistory = ({ history, onDelete }) => {
       <div className="space-y-4 p-4">
         {history.map((item, index) => (
           <div key={index} className="group relative bg-gray-50 p-4 rounded-lg transition-all hover:bg-gray-100 shadow-sm">
-            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={() => onDelete(index)}
-                className="text-gray-400 hover:text-red-500"
-              >
-                <X size={16} />
-              </Button>
-            </div>
             <div className="mb-2 flex justify-between items-center">
               <h3 className="text-lg font-semibold text-gray-900">{item.voice}</h3>
-              <div className="flex space-x-2">
+              <div className="flex space-x-1">
                 <Button variant="ghost" size="icon" className="text-green-600 hover:text-green-700">
                   <Play size={18} />
                 </Button>
                 <Button variant="ghost" size="icon" className="text-blue-600 hover:text-blue-700">
                   <Download size={18} />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={() => onDelete(index)}
+                  className="text-gray-400 hover:text-red-500"
+                >
+                  <X size={18} />
                 </Button>
               </div>
             </div>
