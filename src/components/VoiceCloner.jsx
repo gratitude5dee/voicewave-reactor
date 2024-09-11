@@ -23,6 +23,7 @@ const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice }) => {
   const [speedEmotion, setSpeedEmotion] = useState(null);
   const [mixedVoices, setMixedVoices] = useState(null);
   const bottomPanelRef = useRef(null);
+  const canvasRef = useRef(null);
 
   useEffect(() => {
     if (voices.length > 0 && !voice) {
@@ -93,12 +94,14 @@ const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice }) => {
   return (
     <ResizablePanelGroup direction="vertical" className="h-full">
       <ResizablePanel defaultSize={50} minSize={30}>
-        <Canvas camera={{ position: [0, 0, 5] }}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} />
-          <AudioReactiveSphere audioData={audioData} />
-          <OrbitControls enableZoom={false} enablePan={false} />
-        </Canvas>
+        <div ref={canvasRef} style={{ width: '100%', height: '100%' }}>
+          <Canvas camera={{ position: [0, 0, 5] }}>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} />
+            <AudioReactiveSphere audioData={audioData} />
+            <OrbitControls enableZoom={false} enablePan={false} />
+          </Canvas>
+        </div>
       </ResizablePanel>
       <ResizableHandle className="h-px bg-gray-200" />
       <ResizablePanel defaultSize={50} minSize={30}>
