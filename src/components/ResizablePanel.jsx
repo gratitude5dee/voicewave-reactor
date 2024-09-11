@@ -1,9 +1,9 @@
 import React from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 
-const ResizablePanel = ({ children, className }) => {
+const ResizablePanel = ({ children }) => {
   return (
-    <PanelGroup direction="horizontal" className={`${className} h-screen`}>
+    <PanelGroup direction="horizontal" className="h-screen">
       <Panel minSize={30} defaultSize={100}>
         {children}
       </Panel>
