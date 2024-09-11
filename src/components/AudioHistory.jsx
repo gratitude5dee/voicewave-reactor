@@ -9,15 +9,25 @@ const AudioHistory = ({ history, onDelete }) => {
       <div className="space-y-2 p-4">
         {history.map((item, index) => (
           <div key={index} className="group relative bg-gray-50 p-3 rounded-lg transition-all hover:bg-gray-100">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="absolute left-0 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity z-10"
-              onClick={() => onDelete(index)}
-            >
-              <X size={16} className="text-red-500" />
-            </Button>
-            <div className="pl-8">
+            <div className="flex justify-between items-start mb-2">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => onDelete(index)}
+              >
+                <X size={16} className="text-red-500" />
+              </Button>
+              <div className="hidden group-hover:flex space-x-2">
+                <button className="text-green-600 hover:text-green-700 transition-colors">
+                  <Play size={16} />
+                </button>
+                <button className="text-blue-600 hover:text-blue-700 transition-colors">
+                  <Download size={16} />
+                </button>
+              </div>
+            </div>
+            <div>
               <p className="text-sm font-medium text-gray-900">{item.voice}</p>
               <p className="text-xs text-gray-500 truncate">{item.text}</p>
               {item.mixedVoices && (
@@ -33,14 +43,6 @@ const AudioHistory = ({ history, onDelete }) => {
                   ).join(', ')}
                 </p>
               )}
-            </div>
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 hidden group-hover:flex space-x-2">
-              <button className="text-green-600 hover:text-green-700 transition-colors">
-                <Play size={16} />
-              </button>
-              <button className="text-blue-600 hover:text-blue-700 transition-colors">
-                <Download size={16} />
-              </button>
             </div>
           </div>
         ))}
