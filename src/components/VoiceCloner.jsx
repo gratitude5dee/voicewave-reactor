@@ -5,6 +5,8 @@ import * as THREE from 'three';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { RefreshCw, Download } from 'lucide-react';
 
 const AudioReactiveSphere = ({ audioData }) => {
   const meshRef = useRef();
@@ -25,11 +27,13 @@ const AudioReactiveSphere = ({ audioData }) => {
 };
 
 const VoiceCloner = () => {
-  const [text, setText] = useState('');
+  const [text, setText] = useState('sup');
   const [voice, setVoice] = useState('Aiden');
   const [audioContext, setAudioContext] = useState(null);
   const [analyser, setAnalyser] = useState(null);
   const [audioData, setAudioData] = useState(new Uint8Array(128));
+  const [latency, setLatency] = useState(99);
+  const [isConnected, setIsConnected] = useState(true);
 
   useEffect(() => {
     const context = new (window.AudioContext || window.webkitAudioContext)();
@@ -68,18 +72,16 @@ const VoiceCloner = () => {
     }
   };
 
+  const handleDownload = () => {
+    // Implement download functionality
+    console.log('Downloading audio...');
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
       <div className="w-full max-w-4xl bg-white rounded-lg shadow-xl p-6">
-        <h1 className="text-3xl font-bold mb-6 text-center">Creative Voice Cloner</h1>
-        <div className="flex space-x-4 mb-6">
-          <Input
-            type="text"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Enter text to speak"
-            className="flex-grow"
-          />
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold">Sonic English</h1>
           <Select value={voice} onValueChange={setVoice}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Select voice" />
@@ -90,15 +92,48 @@ const VoiceCloner = () => {
               <SelectItem value="Charlie">Charlie</SelectItem>
             </SelectContent>
           </Select>
-          <Button onClick={handleSpeak}>Speak</Button>
         </div>
-        <div className="w-full h-[400px] bg-black rounded-lg overflow-hidden">
+        <div className="mb-6">
+          <Input
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Enter text to speak"
+            className="w-full text-lg p-4"
+          />
+        </div>
+        <div className="flex space-x-4 mb-6">
+          <Button onClick={handleSpeak} className="flex-grow bg-black text-white">
+            Speak
+          </Button>
+          <Button variant="outline" className="flex-grow">
+            Mix
+          </Button>
+          <Button variant="outline" className="flex-grow">
+            Speed/Emotion
+          </Button>
+        </div>
+        <div className="w-full h-[400px] bg-black rounded-lg overflow-hidden mb-6">
           <Canvas camera={{ position: [0, 0, 5] }}>
             <ambientLight intensity={0.5} />
             <pointLight position={[10, 10, 10]} />
             <AudioReactiveSphere audioData={audioData} />
             <OrbitControls />
           </Canvas>
+        </div>
+        <div className="flex justify-between items-center text-sm text-gray-500">
+          <div className="flex items-center space-x-2">
+            <RefreshCw size={16} />
+            <span>{latency}ms</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+            <span>{isConnected ? 'Connected' : 'Disconnected'}</span>
+          </div>
+          <Button variant="ghost" onClick={handleDownload} className="flex items-center space-x-1">
+            <Download size={16} />
+            <span>Download</span>
+          </Button>
         </div>
       </div>
     </div>
