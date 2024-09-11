@@ -12,12 +12,12 @@ const ModelSelector = ({ model, setModel }) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent hover:from-blue-500 hover:to-purple-600">
+        <Button variant="ghost" className="text-2xl font-bold text-gray-900 hover:bg-gray-100">
           {models.find(m => m.id === model)?.name || 'Select Model'}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-56 p-0">
-        <div className="bg-gray-800 rounded-md shadow-lg">
+        <div className="bg-white rounded-md shadow-lg">
           {models.map((m) => (
             <Button
               key={m.id}

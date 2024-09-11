@@ -15,13 +15,13 @@ const VoiceClonerCard = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen bg-gray-900 text-white">
+    <div className="flex flex-col h-screen w-screen bg-gray-50 text-gray-900">
       <HeaderBar />
       <ResizablePanelGroup direction="horizontal" className="flex-grow">
         <ResizablePanel defaultSize={30} minSize={20}>
           <AudioHistory history={audioHistory} />
         </ResizablePanel>
-        <ResizableHandle className="w-1 bg-gray-700" />
+        <ResizableHandle className="w-px bg-gray-200" />
         <ResizablePanel defaultSize={70} minSize={50}>
           <VoiceCloner onNewAudio={handleNewAudio} />
         </ResizablePanel>
