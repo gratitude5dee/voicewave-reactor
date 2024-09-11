@@ -29,20 +29,28 @@ const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice, model, setModel })
   const handleSpeak = async (voice, text) => {
     if (voice && text) {
       // Simulate audio generation (replace with actual API call)
-      const response = await fetch(`https://dummyapi.com/tts?voice=${voice}&text=${encodeURIComponent(text)}`);
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // A4 note
+      
+      const gainNode = audioContext.createGain();
+      gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.start();
+      setTimeout(() => {
+        oscillator.stop();
+      }, 2000); // Stop after 2 seconds
 
-      const audio = new Audio(audioUrl);
-      audio.addEventListener('canplaythrough', () => {
-        if (sourceRef.current) {
-          sourceRef.current.disconnect();
-        }
-        sourceRef.current = audioContextRef.current.createMediaElementSource(audio);
-        sourceRef.current.connect(analyserRef.current);
-        analyserRef.current.connect(audioContextRef.current.destination);
-        audio.play();
-      });
+      if (sourceRef.current) {
+        sourceRef.current.disconnect();
+      }
+      sourceRef.current = oscillator;
+      sourceRef.current.connect(analyserRef.current);
+      analyserRef.current.connect(audioContextRef.current.destination);
 
       onNewAudio(voice, text, speedEmotion, mixedVoices);
       startVisualization();
