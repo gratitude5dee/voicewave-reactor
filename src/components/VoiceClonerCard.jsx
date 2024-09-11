@@ -24,6 +24,7 @@ const VoiceClonerCard = () => {
   const [isCloneVoiceOpen, setIsCloneVoiceOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [favorites, setFavorites] = useState([]);
+  const [model, setModel] = useState('sonic-english');
 
   const handleNewAudio = (voice, text, speedEmotion, mixedVoices) => {
     setAudioHistory(prev => [...prev, { voice, text, speedEmotion, mixedVoices }]);
@@ -114,6 +115,8 @@ const VoiceClonerCard = () => {
               favorites={favorites}
               onToggleFavorite={toggleFavorite}
               onCloneVoice={() => setIsCloneVoiceOpen(true)}
+              model={model}
+              setModel={setModel}
             />
           </ResizablePanel>
         </ResizablePanelGroup>

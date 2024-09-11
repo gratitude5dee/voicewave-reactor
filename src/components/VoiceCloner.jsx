@@ -9,13 +9,12 @@ import ModelSelector from './ModelSelector';
 import VoiceControls from './VoiceControls';
 import StatusBar from './StatusBar';
 
-const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice }) => {
+const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice, model, setModel }) => {
   const [audioData, setAudioData] = useState(new Float32Array(128).fill(0));
   const [isSpeedEmotionOpen, setIsSpeedEmotionOpen] = useState(false);
   const [isMixVoicesOpen, setIsMixVoicesOpen] = useState(false);
   const [speedEmotion, setSpeedEmotion] = useState(null);
   const [mixedVoices, setMixedVoices] = useState(null);
-  const [model, setModel] = useState('sonic-english'); // Add this line
   const canvasRef = useRef(null);
 
   const handleSpeak = (voice, text) => {
@@ -52,7 +51,7 @@ const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice }) => {
       <ResizableHandle className="h-px bg-gray-200" />
       <ResizablePanel defaultSize={50} minSize={30}>
         <div className="p-6 space-y-6 h-full flex flex-col bg-white rounded-lg shadow-lg">
-          <ModelSelector model={model} setModel={setModel} /> {/* Update this line */}
+          <ModelSelector model={model} setModel={setModel} />
           <VoiceControls
             voices={voices}
             onSpeak={handleSpeak}

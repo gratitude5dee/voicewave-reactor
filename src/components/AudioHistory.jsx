@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Play, Download, X, Star } from 'lucide-react';
+import { Play, Download, Star, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -22,7 +22,7 @@ const AudioHistory = ({ history, onDelete, favorites, onToggleFavorite }) => {
           <div key={index} className="group relative bg-gray-50 p-4 rounded-lg transition-all hover:bg-gray-100 hover:shadow-md">
             <div className="mb-2 flex justify-between items-center">
               <h3 className="text-lg font-semibold text-gray-900">{item.voice}</h3>
-              <div className="hidden group-hover:flex space-x-1">
+              <div className="flex space-x-1">
                 <Button variant="ghost" size="icon" className="text-green-600 hover:text-green-700 hover:bg-green-100 transition-colors duration-300">
                   <Play size={18} />
                 </Button>
@@ -49,7 +49,7 @@ const AudioHistory = ({ history, onDelete, favorites, onToggleFavorite }) => {
             </div>
             <p className="text-sm text-gray-700 mb-2">{item.text}</p>
             {item.speedEmotion && (
-              <div className="hidden group-hover:block mb-2 transition-all duration-300 opacity-0 group-hover:opacity-100">
+              <div className="mb-2">
                 <Badge variant="outline" className="mr-2 bg-blue-50 text-blue-600 border-blue-200">
                   Speed: {item.speedEmotion.speed}
                 </Badge>
@@ -57,7 +57,7 @@ const AudioHistory = ({ history, onDelete, favorites, onToggleFavorite }) => {
               </div>
             )}
             {item.mixedVoices && (
-              <div className="hidden group-hover:block text-xs text-purple-600 mt-2 transition-all duration-300 opacity-0 group-hover:opacity-100">
+              <div className="text-xs text-purple-600 mt-2">
                 Mixed: {item.mixedVoices.map(v => `${v.name} (${v.percentage}%)`).join(', ')}
               </div>
             )}
