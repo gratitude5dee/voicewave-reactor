@@ -1,10 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { RefreshCw, Download, Mic, Settings } from 'lucide-react';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import SpeedEmotionPopup from './SpeedEmotionPopup';
 import MixVoicesPopup from './MixVoicesPopup';
@@ -19,6 +15,7 @@ const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice }) => {
   const [isMixVoicesOpen, setIsMixVoicesOpen] = useState(false);
   const [speedEmotion, setSpeedEmotion] = useState(null);
   const [mixedVoices, setMixedVoices] = useState(null);
+  const [model, setModel] = useState('sonic-english'); // Add this line
   const canvasRef = useRef(null);
 
   const handleSpeak = (voice, text) => {
@@ -55,7 +52,7 @@ const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice }) => {
       <ResizableHandle className="h-px bg-gray-200" />
       <ResizablePanel defaultSize={50} minSize={30}>
         <div className="p-6 space-y-6 h-full flex flex-col bg-white rounded-lg shadow-lg">
-          <ModelSelector />
+          <ModelSelector model={model} setModel={setModel} /> {/* Update this line */}
           <VoiceControls
             voices={voices}
             onSpeak={handleSpeak}
