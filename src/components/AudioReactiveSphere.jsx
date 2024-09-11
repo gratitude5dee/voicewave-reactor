@@ -1,10 +1,11 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
 const AudioReactiveSphere = ({ audioData }) => {
   const meshRef = useRef();
   const particlesRef = useRef();
+  const particlesGeometryRef = useRef(new THREE.BufferGeometry());
 
   const particlesCount = 2000;
   const positions = useMemo(() => {
@@ -20,15 +21,23 @@ const AudioReactiveSphere = ({ audioData }) => {
     return positions;
   }, []);
 
+  useEffect(() => {
+    if (particlesGeometryRef.current) {
+      particlesGeometryRef.current.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    }
+  }, [positions]);
+
   useFrame(() => {
-    if (audioData && meshRef.current && particlesRef.current) {
-      const average = audioData.reduce((a, b) => a + b) / audioData.length;
+    if (audioData && meshRef.current && particlesGeometryRef.current) {
+      const average = audioData.reduce((a, b) => a + b, 0) / audioData.length;
       const scale = 1 + average / 128;
       meshRef.current.scale.setScalar(scale);
       meshRef.current.rotation.x += 0.01;
       meshRef.current.rotation.y += 0.01;
 
-      const positions = particlesRef.current.geometry.attributes.position.array;
+      const positionAttribute = particlesGeometryRef.current.getAttribute('position');
+      const positions = positionAttribute.array;
+
       for (let i = 0; i < particlesCount; i++) {
         const i3 = i * 3;
         const x = positions[i3];
@@ -40,7 +49,7 @@ const AudioReactiveSphere = ({ audioData }) => {
         positions[i3 + 1] *= factor;
         positions[i3 + 2] *= factor;
       }
-      particlesRef.current.geometry.attributes.position.needsUpdate = true;
+      positionAttribute.needsUpdate = true;
     }
   });
 
@@ -51,14 +60,7 @@ const AudioReactiveSphere = ({ audioData }) => {
         <meshPhongMaterial color="#4a9ff5" emissive="#4a9ff5" emissiveIntensity={0.5} shininess={50} />
       </mesh>
       <points ref={particlesRef}>
-        <bufferGeometry>
-          <bufferAttribute
-            attachObject={['attributes', 'position']}
-            count={particlesCount}
-            itemSize={3}
-            array={positions}
-          />
-        </bufferGeometry>
+        <primitive object={particlesGeometryRef.current} />
         <pointsMaterial size={0.02} color="#ffffff" />
       </points>
     </group>
