@@ -1,9 +1,9 @@
-import VoiceCloner from '../components/VoiceCloner';
+import VoiceClonerCard from '../components/VoiceClonerCard';
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-gray-900">
-      <VoiceCloner />
+      <VoiceClonerCard />
     </div>
   );
 };

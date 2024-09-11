@@ -14,8 +14,6 @@ const VoiceCloner = () => {
   const [text, setText] = useState('');
   const [voice, setVoice] = useState('Aiden');
   const [model, setModel] = useState('sonic-english');
-  const [audioContext, setAudioContext] = useState(null);
-  const [analyser, setAnalyser] = useState(null);
   const [audioData, setAudioData] = useState(new Uint8Array(128));
   const [latency, setLatency] = useState(99);
   const [isConnected, setIsConnected] = useState(true);
@@ -23,38 +21,17 @@ const VoiceCloner = () => {
   const [isMixVoicesOpen, setIsMixVoicesOpen] = useState(false);
   const [isCloneVoiceOpen, setIsCloneVoiceOpen] = useState(false);
 
-  const handleSpeak = async () => {
-    if (!audioContext) return;
-
-    try {
-      const response = await fetch(`https://api.example.com/tts?text=${encodeURIComponent(text)}&voice=${voice}&model=${model}`);
-      const arrayBuffer = await response.arrayBuffer();
-      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-      
-      const source = audioContext.createBufferSource();
-      source.buffer = audioBuffer;
-      source.connect(analyser);
-      analyser.connect(audioContext.destination);
-      source.start();
-
-      const updateAudioData = () => {
-        analyser.getByteFrequencyData(audioData);
-        setAudioData(new Uint8Array(audioData));
-        requestAnimationFrame(updateAudioData);
-      };
-      updateAudioData();
-    } catch (error) {
-      console.error('Error playing audio:', error);
-    }
+  const handleSpeak = () => {
+    // Implement speak functionality
   };
 
   const handleDownload = () => {
-    console.log('Downloading audio...');
+    // Implement download functionality
   };
 
   return (
-    <div className="flex flex-col bg-gray-900 text-white">
-      <div className="h-64 bg-black rounded-t-xl overflow-hidden relative">
+    <div className="flex flex-col h-full">
+      <div className="h-1/2 bg-black rounded-t-xl overflow-hidden relative">
         <Canvas camera={{ position: [0, 0, 5] }}>
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
@@ -62,7 +39,7 @@ const VoiceCloner = () => {
           <OrbitControls />
         </Canvas>
       </div>
-      <div className="p-4 space-y-4">
+      <div className="p-6 space-y-6 flex-grow bg-gray-900">
         <div className="flex justify-between items-center">
           <ModelSelector model={model} setModel={setModel} />
           <Button
