@@ -45,7 +45,7 @@ const VoiceCloner = () => {
           <Button
             onClick={() => setIsCloneVoiceOpen(true)}
             variant="outline"
-            className="text-purple-400 border-purple-400 hover:bg-purple-400 hover:text-white"
+            className="text-purple-400 border-purple-400 hover:bg-purple-400 hover:text-white rounded-full"
           >
             <Plus className="mr-2 h-4 w-4" /> Clone Voice
           </Button>
@@ -62,10 +62,18 @@ const VoiceCloner = () => {
           </Button>
         </div>
         <div className="flex space-x-2">
-          <Button variant="outline" className="flex-grow" onClick={() => setIsMixVoicesOpen(true)}>
+          <Button 
+            variant="outline" 
+            className="flex-grow bg-blue-600 hover:bg-blue-700 text-white border-blue-600" 
+            onClick={() => setIsMixVoicesOpen(true)}
+          >
             Mix Voices
           </Button>
-          <Button variant="outline" className="flex-grow" onClick={() => setIsSpeedEmotionOpen(true)}>
+          <Button 
+            variant="outline" 
+            className="flex-grow bg-green-600 hover:bg-green-700 text-white border-green-600" 
+            onClick={() => setIsSpeedEmotionOpen(true)}
+          >
             <Settings className="mr-2 h-4 w-4" /> Speed/Emotion
           </Button>
         </div>
