@@ -50,7 +50,7 @@ const CloneVoicePopup = ({ isOpen, onClose }) => {
               <h3 className="font-semibold mb-2">Record a voice clip</h3>
               <Button
                 onClick={isRecording ? handleStopRecording : handleStartRecording}
-                className={`w-full ${isRecording ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'}`}
+                className={`w-full ${isRecording ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
               >
                 <Mic className="mr-2 h-5 w-5" />
                 {isRecording ? 'Stop' : 'Start'}
@@ -74,8 +74,25 @@ const CloneVoicePopup = ({ isOpen, onClose }) => {
               <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Recommended</span>
             </div>
           </TabsContent>
-          <TabsContent value="upload">
-            <p>Upload functionality to be implemented.</p>
+          <TabsContent value="upload" className="space-y-4">
+            <div className="bg-gray-100 p-4 rounded-lg">
+              <h3 className="font-semibold mb-2">Sound clip</h3>
+              <Input type="file" accept="audio/*" className="w-full" />
+              <p className="text-sm text-gray-500 mt-2">
+                Aim for 10-15 seconds of audio. The max audio length is 30 seconds and max file size is 4 MB.
+              </p>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="enhance-audio-upload"
+                checked={enhanceAudio}
+                onCheckedChange={setEnhanceAudio}
+              />
+              <label htmlFor="enhance-audio-upload" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Enhance audio for cloning
+              </label>
+              <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Recommended</span>
+            </div>
           </TabsContent>
         </Tabs>
         <div className="space-y-4 mt-4">
@@ -106,9 +123,12 @@ const CloneVoicePopup = ({ isOpen, onClose }) => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="en">English</SelectItem>
-                <SelectItem value="es">Spanish</SelectItem>
+                <SelectItem value="de">German</SelectItem>
+                <SelectItem value="pt">Portuguese</SelectItem>
+                <SelectItem value="zh">Chinese</SelectItem>
+                <SelectItem value="ja">Japanese</SelectItem>
                 <SelectItem value="fr">French</SelectItem>
-                {/* Add more languages as needed */}
+                <SelectItem value="es">Spanish</SelectItem>
               </SelectContent>
             </Select>
             <p className="text-sm text-gray-500 mt-1">The language the voice is intended to work with.</p>

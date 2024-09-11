@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Button } from "@/components/ui/button";
@@ -22,18 +22,6 @@ const VoiceCloner = () => {
   const [isSpeedEmotionOpen, setIsSpeedEmotionOpen] = useState(false);
   const [isMixVoicesOpen, setIsMixVoicesOpen] = useState(false);
   const [isCloneVoiceOpen, setIsCloneVoiceOpen] = useState(false);
-
-  useEffect(() => {
-    const context = new (window.AudioContext || window.webkitAudioContext)();
-    const analyserNode = context.createAnalyser();
-    analyserNode.fftSize = 256;
-    setAudioContext(context);
-    setAnalyser(analyserNode);
-
-    return () => {
-      context.close();
-    };
-  }, []);
 
   const handleSpeak = async () => {
     if (!audioContext) return;
