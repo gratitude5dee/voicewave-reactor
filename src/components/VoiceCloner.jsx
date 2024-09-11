@@ -33,6 +33,8 @@ const VoiceCloner = ({ onNewAudio }) => {
   };
 
   const resizeObserverCallback = useCallback((entries) => {
+    if (!bottomPanelRef.current) return;
+
     for (let entry of entries) {
       if (entry.target === bottomPanelRef.current) {
         const height = entry.contentRect.height;
@@ -41,9 +43,10 @@ const VoiceCloner = ({ onNewAudio }) => {
           const buttonBottom = downloadButton.offsetTop + downloadButton.offsetHeight;
           const minHeight = buttonBottom + 10; // 10px below the download button
           if (height < minHeight) {
-            entry.target.style.height = `${minHeight}px`;
+            bottomPanelRef.current.style.height = `${minHeight}px`;
           }
         }
+        break; // Only process the first matching entry
       }
     }
   }, []);
