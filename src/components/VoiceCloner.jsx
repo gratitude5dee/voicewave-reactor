@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RefreshCw, Download } from 'lucide-react';
 import SpeedEmotionPopup from './SpeedEmotionPopup';
+import MixVoicesPopup from './MixVoicesPopup';
 
 const AudioReactiveSphere = ({ audioData }) => {
   const meshRef = useRef();
@@ -35,6 +36,7 @@ const VoiceCloner = () => {
   const [latency, setLatency] = useState(99);
   const [isConnected, setIsConnected] = useState(true);
   const [isSpeedEmotionOpen, setIsSpeedEmotionOpen] = useState(false);
+  const [isMixVoicesOpen, setIsMixVoicesOpen] = useState(false);
 
   useEffect(() => {
     const context = new (window.AudioContext || window.webkitAudioContext)();
@@ -106,7 +108,7 @@ const VoiceCloner = () => {
           <Button onClick={handleSpeak} className="flex-grow bg-black text-white">
             Speak
           </Button>
-          <Button variant="outline" className="flex-grow">
+          <Button variant="outline" className="flex-grow" onClick={() => setIsMixVoicesOpen(true)}>
             Mix
           </Button>
           <Button variant="outline" className="flex-grow" onClick={() => setIsSpeedEmotionOpen(true)}>
@@ -137,6 +139,7 @@ const VoiceCloner = () => {
         </div>
       </div>
       <SpeedEmotionPopup isOpen={isSpeedEmotionOpen} onClose={() => setIsSpeedEmotionOpen(false)} />
+      <MixVoicesPopup isOpen={isMixVoicesOpen} onClose={() => setIsMixVoicesOpen(false)} />
     </div>
   );
 };
