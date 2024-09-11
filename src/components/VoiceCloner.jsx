@@ -5,8 +5,8 @@ import * as THREE from 'three';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
 import { RefreshCw, Download } from 'lucide-react';
+import SpeedEmotionPopup from './SpeedEmotionPopup';
 
 const AudioReactiveSphere = ({ audioData }) => {
   const meshRef = useRef();
@@ -34,6 +34,7 @@ const VoiceCloner = () => {
   const [audioData, setAudioData] = useState(new Uint8Array(128));
   const [latency, setLatency] = useState(99);
   const [isConnected, setIsConnected] = useState(true);
+  const [isSpeedEmotionOpen, setIsSpeedEmotionOpen] = useState(false);
 
   useEffect(() => {
     const context = new (window.AudioContext || window.webkitAudioContext)();
@@ -73,7 +74,6 @@ const VoiceCloner = () => {
   };
 
   const handleDownload = () => {
-    // Implement download functionality
     console.log('Downloading audio...');
   };
 
@@ -109,7 +109,7 @@ const VoiceCloner = () => {
           <Button variant="outline" className="flex-grow">
             Mix
           </Button>
-          <Button variant="outline" className="flex-grow">
+          <Button variant="outline" className="flex-grow" onClick={() => setIsSpeedEmotionOpen(true)}>
             Speed/Emotion
           </Button>
         </div>
@@ -136,6 +136,7 @@ const VoiceCloner = () => {
           </Button>
         </div>
       </div>
+      <SpeedEmotionPopup isOpen={isSpeedEmotionOpen} onClose={() => setIsSpeedEmotionOpen(false)} />
     </div>
   );
 };
