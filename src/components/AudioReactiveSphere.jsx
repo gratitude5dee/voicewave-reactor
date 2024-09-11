@@ -13,9 +13,18 @@ class AudioReactiveShaderMaterial extends THREE.ShaderMaterial {
       },
       vertexShader: `
         varying vec2 vUv;
+        uniform float uTime;
+        uniform float uAudioData[128];
+
         void main() {
           vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          vec3 newPosition = position;
+          float audioInfluence = 0.0;
+          for (int i = 0; i < 128; i++) {
+            audioInfluence += uAudioData[i] * 0.01;
+          }
+          newPosition += normal * audioInfluence;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
         }
       `,
       fragmentShader: `
@@ -27,7 +36,7 @@ class AudioReactiveShaderMaterial extends THREE.ShaderMaterial {
         void main() {
           float audioInfluence = 0.0;
           for (int i = 0; i < 128; i++) {
-            audioInfluence += uAudioData[i] * 0.1;
+            audioInfluence += uAudioData[i] * 0.01;
           }
 
           vec3 color = uColor + vec3(sin(uTime * 0.5) * 0.2, cos(uTime * 0.3) * 0.2, sin(uTime * 0.7) * 0.2);
@@ -61,7 +70,7 @@ const AudioReactiveSphere = ({ audioData }) => {
       materialRef.current.uniforms.uTime.value = time;
       materialRef.current.uniforms.uAudioData.value = audioData;
 
-      const scale = 1 + (audioData.reduce((a, b) => a + b, 0) / audioData.length) * 0.2;
+      const scale = 1 + (audioData.reduce((a, b) => a + b, 0) / audioData.length) * 0.01;
       meshRef.current.scale.setScalar(scale);
     }
   });

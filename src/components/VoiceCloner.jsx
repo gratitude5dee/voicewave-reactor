@@ -16,19 +16,50 @@ const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice, model, setModel })
   const [speedEmotion, setSpeedEmotion] = useState(null);
   const [mixedVoices, setMixedVoices] = useState(null);
   const canvasRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const analyserRef = useRef(null);
+  const sourceRef = useRef(null);
 
-  const handleSpeak = (voice, text) => {
+  useEffect(() => {
+    audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    analyserRef.current = audioContextRef.current.createAnalyser();
+    analyserRef.current.fftSize = 256;
+  }, []);
+
+  const handleSpeak = async (voice, text) => {
     if (voice && text) {
+      // Simulate audio generation (replace with actual API call)
+      const response = await fetch(`https://dummyapi.com/tts?voice=${voice}&text=${encodeURIComponent(text)}`);
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+
+      const audio = new Audio(audioUrl);
+      audio.addEventListener('canplaythrough', () => {
+        if (sourceRef.current) {
+          sourceRef.current.disconnect();
+        }
+        sourceRef.current = audioContextRef.current.createMediaElementSource(audio);
+        sourceRef.current.connect(analyserRef.current);
+        analyserRef.current.connect(audioContextRef.current.destination);
+        audio.play();
+      });
+
       onNewAudio(voice, text, speedEmotion, mixedVoices);
-      simulateAudioReactivity();
+      startVisualization();
     }
   };
 
-  const simulateAudioReactivity = () => {
-    const interval = setInterval(() => {
-      setAudioData(new Float32Array(128).map(() => Math.random() * 0.5));
-    }, 50);
-    setTimeout(() => clearInterval(interval), 3000);
+  const startVisualization = () => {
+    const bufferLength = analyserRef.current.frequencyBinCount;
+    const dataArray = new Float32Array(bufferLength);
+
+    const updateVisualization = () => {
+      analyserRef.current.getFloatFrequencyData(dataArray);
+      setAudioData(dataArray);
+      requestAnimationFrame(updateVisualization);
+    };
+
+    updateVisualization();
   };
 
   const handleMixVoices = (mixedVoicesData) => {
