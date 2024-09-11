@@ -94,7 +94,7 @@ const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice, model, setModel })
           </Canvas>
         </div>
       </ResizablePanel>
-      <ResizableHandle className="h-px bg-gray-200" />
+      <ResizableHandle />
       <ResizablePanel defaultSize={50} minSize={30}>
         <div className="p-6 space-y-6 h-full flex flex-col bg-white rounded-lg shadow-lg">
           <ModelSelector model={model} setModel={setModel} />
