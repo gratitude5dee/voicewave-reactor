@@ -59,7 +59,7 @@ const MixVoicesPopup = ({ isOpen, onClose, voices, onSave, initialMixedVoices })
         <DialogHeader>
           <DialogTitle>Mix voices <span className="text-sm font-normal text-gray-500">Alpha</span></DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto">
           <div className="flex items-center justify-between">
             <span className="text-base">Enable mixing</span>
             <Switch checked={isMixingEnabled} onCheckedChange={setIsMixingEnabled} />
@@ -110,8 +110,8 @@ const MixVoicesPopup = ({ isOpen, onClose, voices, onSave, initialMixedVoices })
               Add to mix
             </Button>
           )}
-          <Button onClick={handleSave} className="mt-4">Save</Button>
         </div>
+        <Button onClick={handleSave} className="mt-4 w-full">Save</Button>
       </DialogContent>
     </Dialog>
   );
