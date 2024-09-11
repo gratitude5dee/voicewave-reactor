@@ -1,21 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Minus, Square, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
-const HeaderBar = () => {
-  const [isMaximized, setIsMaximized] = useState(false);
-
+const HeaderBar = ({ onMinimize, isMinimized }) => {
   const handleMinimize = () => {
-    // Implement minimize functionality
-    console.log('Minimize');
+    onMinimize();
   };
 
   const handleMaximize = () => {
-    setIsMaximized(!isMaximized);
-    if (!isMaximized) {
-      document.documentElement.requestFullscreen();
-    } else {
+    if (document.fullscreenElement) {
       document.exitFullscreen();
+    } else {
+      document.documentElement.requestFullscreen();
     }
   };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ const VoiceCloner = ({ onNewAudio }) => {
   const [isSpeedEmotionOpen, setIsSpeedEmotionOpen] = useState(false);
   const [isMixVoicesOpen, setIsMixVoicesOpen] = useState(false);
   const [isCloneVoiceOpen, setIsCloneVoiceOpen] = useState(false);
+  const bottomPanelRef = useRef(null);
 
   const handleSpeak = () => {
     onNewAudio(voice, text);
@@ -30,6 +31,32 @@ const VoiceCloner = ({ onNewAudio }) => {
   const handleDownload = () => {
     // Implement download functionality
   };
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        const height = entry.contentRect.height;
+        const downloadButton = entry.target.querySelector('#download-button');
+        if (downloadButton) {
+          const buttonBottom = downloadButton.offsetTop + downloadButton.offsetHeight;
+          const minHeight = buttonBottom + 10; // 10px below the download button
+          if (height < minHeight) {
+            entry.target.style.height = `${minHeight}px`;
+          }
+        }
+      }
+    });
+
+    if (bottomPanelRef.current) {
+      resizeObserver.observe(bottomPanelRef.current);
+    }
+
+    return () => {
+      if (bottomPanelRef.current) {
+        resizeObserver.unobserve(bottomPanelRef.current);
+      }
+    };
+  }, []);
 
   return (
     <ResizablePanelGroup direction="vertical" className="h-full">
@@ -42,7 +69,7 @@ const VoiceCloner = ({ onNewAudio }) => {
         </Canvas>
       </ResizablePanel>
       <ResizableHandle className="h-px bg-gray-200" />
-      <ResizablePanel defaultSize={50} minSize={30}>
+      <ResizablePanel defaultSize={50} minSize={30} ref={bottomPanelRef}>
         <div className="p-6 space-y-6 h-full flex flex-col bg-white rounded-lg shadow-lg">
           <div className="flex justify-between items-center">
             <ModelSelector model={model} setModel={setModel} />
@@ -103,7 +130,7 @@ const VoiceCloner = ({ onNewAudio }) => {
                 <span>{isConnected ? 'Connected' : 'Disconnected'}</span>
               </div>
             </div>
-            <Button variant="ghost" onClick={handleDownload} className="text-gray-500 hover:text-gray-700">
+            <Button id="download-button" variant="ghost" onClick={handleDownload} className="text-gray-500 hover:text-gray-700">
               <Download size={16} className="mr-2" />
               <span>Download</span>
             </Button>
