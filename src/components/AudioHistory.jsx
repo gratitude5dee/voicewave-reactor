@@ -12,12 +12,12 @@ const AudioHistory = ({ history, onDelete }) => {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute left-0 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity z-10"
               onClick={() => onDelete(index)}
             >
               <X size={16} className="text-red-500" />
             </Button>
-            <div className="flex-grow">
+            <div className="flex-grow pl-8">
               <p className="text-sm font-medium text-gray-900">{item.voice}</p>
               <p className="text-xs text-gray-500 truncate">{item.text}</p>
               {item.speedEmotion && (
