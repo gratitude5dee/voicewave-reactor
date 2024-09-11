@@ -180,6 +180,7 @@ const VoiceCloner = ({ onNewAudio, voices = [] }) => {
         onClose={() => setIsMixVoicesOpen(false)} 
         voices={voices}
         onSave={handleMixVoices}
+        initialMixedVoices={mixedVoices}
       />
       <CloneVoicePopup isOpen={isCloneVoiceOpen} onClose={() => setIsCloneVoiceOpen(false)} />
     </ResizablePanelGroup>

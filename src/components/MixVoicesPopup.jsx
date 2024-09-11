@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
@@ -6,12 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2, ChevronUp, ChevronDown } from 'lucide-react';
 
-const MixVoicesPopup = ({ isOpen, onClose, voices, onSave }) => {
+const MixVoicesPopup = ({ isOpen, onClose, voices, onSave, initialMixedVoices }) => {
   const [isMixingEnabled, setIsMixingEnabled] = useState(false);
   const [mixedVoices, setMixedVoices] = useState([
     { id: 1, name: '', percentage: 50 },
     { id: 2, name: '', percentage: 50 },
   ]);
+
+  useEffect(() => {
+    if (initialMixedVoices) {
+      setMixedVoices(initialMixedVoices);
+      setIsMixingEnabled(true);
+    }
+  }, [initialMixedVoices]);
 
   const handleAddVoice = () => {
     if (mixedVoices.length < 5) {
@@ -60,7 +67,7 @@ const MixVoicesPopup = ({ isOpen, onClose, voices, onSave }) => {
           <p className="text-sm text-gray-500">
             Use mixing to create a new voice that resembles the selected source voices.
           </p>
-          {mixedVoices.map((voice, index) => (
+          {isMixingEnabled && mixedVoices.map((voice, index) => (
             <div key={voice.id} className="space-y-2">
               <div className="flex items-center space-x-2">
                 <Select value={voice.name} onValueChange={(value) => handleVoiceChange(voice.id, 'name', value)}>
@@ -98,7 +105,7 @@ const MixVoicesPopup = ({ isOpen, onClose, voices, onSave }) => {
               </div>
             </div>
           ))}
-          {mixedVoices.length < 5 && (
+          {isMixingEnabled && mixedVoices.length < 5 && (
             <Button onClick={handleAddVoice} className="mt-2">
               Add to mix
             </Button>
