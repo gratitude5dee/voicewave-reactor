@@ -120,7 +120,7 @@ const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice }) => {
                     <SelectItem key={v.name} value={v.name}>{v.name}</SelectItem>
                   ))
                 ) : (
-                  <SelectItem value="" disabled>No voices available</SelectItem>
+                  <SelectItem value="no-voices" disabled>No voices available</SelectItem>
                 )}
               </SelectContent>
             </Select>
