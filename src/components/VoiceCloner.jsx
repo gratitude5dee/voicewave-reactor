@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Button } from "@/components/ui/button";
@@ -32,32 +32,36 @@ const VoiceCloner = ({ onNewAudio }) => {
     // Implement download functionality
   };
 
-  useEffect(() => {
-    const resizeObserver = new ResizeObserver(entries => {
-      for (let entry of entries) {
-        const height = entry.contentRect.height;
-        const downloadButton = entry.target.querySelector('#download-button');
-        if (downloadButton) {
-          const buttonBottom = downloadButton.offsetTop + downloadButton.offsetHeight;
-          const minHeight = buttonBottom + 10; // 10px below the download button
-          if (height < minHeight) {
-            entry.target.style.height = `${minHeight}px`;
-          }
+  const resizeObserverCallback = useCallback((entries) => {
+    for (let entry of entries) {
+      const height = entry.contentRect.height;
+      const downloadButton = entry.target.querySelector('#download-button');
+      if (downloadButton) {
+        const buttonBottom = downloadButton.offsetTop + downloadButton.offsetHeight;
+        const minHeight = buttonBottom + 10; // 10px below the download button
+        if (height < minHeight) {
+          entry.target.style.height = `${minHeight}px`;
         }
       }
-    });
+    }
+  }, []);
 
+  useEffect(() => {
+    let resizeObserver;
     const currentBottomPanel = bottomPanelRef.current;
+
     if (currentBottomPanel) {
+      resizeObserver = new ResizeObserver(resizeObserverCallback);
       resizeObserver.observe(currentBottomPanel);
     }
 
     return () => {
-      if (currentBottomPanel) {
+      if (resizeObserver && currentBottomPanel) {
         resizeObserver.unobserve(currentBottomPanel);
+        resizeObserver.disconnect();
       }
     };
-  }, []);
+  }, [resizeObserverCallback]);
 
   return (
     <ResizablePanelGroup direction="vertical" className="h-full">
