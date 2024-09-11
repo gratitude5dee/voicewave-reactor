@@ -3,7 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { navItems } from "./nav-items";
-import ResizablePanel from "./components/ResizablePanel";
+import VoiceClonerCard from "./components/VoiceClonerCard";
 
 const queryClient = new QueryClient();
 
@@ -12,13 +12,13 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <BrowserRouter>
-        <ResizablePanel>
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
           <Routes>
             {navItems.map(({ to, page }) => (
-              <Route key={to} path={to} element={page} />
+              <Route key={to} path={to} element={<VoiceClonerCard />} />
             ))}
           </Routes>
-        </ResizablePanel>
+        </div>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

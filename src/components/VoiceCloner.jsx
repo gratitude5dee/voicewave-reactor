@@ -53,8 +53,8 @@ const VoiceCloner = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-gray-900">
-      <div className="h-96 bg-black rounded-t-xl overflow-hidden relative">
+    <div className="flex flex-col bg-gray-900">
+      <div className="h-64 bg-black rounded-t-xl overflow-hidden relative">
         <Canvas camera={{ position: [0, 0, 5] }}>
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
@@ -62,60 +62,60 @@ const VoiceCloner = () => {
           <OrbitControls />
         </Canvas>
       </div>
-      <div className="flex-grow p-4 sm:p-8">
-        <div className="flex flex-wrap justify-between items-center mb-6">
-          <div className="flex items-center space-x-4 mb-4 sm:mb-0">
+      <div className="p-4">
+        <div className="flex flex-wrap justify-between items-center mb-4">
+          <div className="flex items-center space-x-4 mb-2 sm:mb-0">
             <ModelSelector model={model} setModel={setModel} />
             <Button
               onClick={() => setIsCloneVoiceOpen(true)}
-              className="bg-white text-purple-900 hover:bg-purple-100 transition-all duration-300 font-bold py-2 px-4 rounded-full shadow-lg"
+              className="bg-white text-purple-900 hover:bg-purple-100 transition-all duration-300 font-bold py-1 px-3 rounded-full shadow-lg text-sm"
             >
-              <Plus className="mr-2 h-5 w-5" /> Clone Voice
+              <Plus className="mr-1 h-4 w-4" /> Clone Voice
             </Button>
           </div>
           <select
             value={voice}
             onChange={(e) => setVoice(e.target.value)}
-            className="bg-gray-800 text-white border-gray-700 rounded-md p-2"
+            className="bg-gray-800 text-white border-gray-700 rounded-md p-1 text-sm"
           >
             <option value="Aiden">Aiden</option>
             <option value="Bella">Bella</option>
             <option value="Charlie">Charlie</option>
           </select>
         </div>
-        <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mb-4">
           <Input
             type="text"
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Enter text to speak"
-            className="flex-grow text-lg p-4 bg-gray-800 border-gray-700 text-white placeholder-gray-400 rounded-l-full"
+            className="flex-grow text-sm p-2 bg-gray-800 border-gray-700 text-white placeholder-gray-400 rounded-l-full"
           />
-          <Button onClick={handleSpeak} className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-r-full transition-all duration-300">
-            <Mic className="mr-2 h-5 w-5" /> Speak
+          <Button onClick={handleSpeak} className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-r-full transition-all duration-300 text-sm">
+            <Mic className="mr-1 h-4 w-4" /> Speak
           </Button>
         </div>
-        <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
-          <Button variant="outline" className="flex-grow bg-gray-800 text-white border-gray-700 hover:bg-gray-700 transition-all duration-300 rounded-full" onClick={() => setIsMixVoicesOpen(true)}>
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mb-4">
+          <Button variant="outline" className="flex-grow bg-gray-800 text-white border-gray-700 hover:bg-gray-700 transition-all duration-300 rounded-full text-sm" onClick={() => setIsMixVoicesOpen(true)}>
             Mix Voices
           </Button>
-          <Button variant="outline" className="flex-grow bg-gray-800 text-white border-gray-700 hover:bg-gray-700 transition-all duration-300 rounded-full" onClick={() => setIsSpeedEmotionOpen(true)}>
-            <Settings className="mr-2 h-5 w-5" /> Speed/Emotion
+          <Button variant="outline" className="flex-grow bg-gray-800 text-white border-gray-700 hover:bg-gray-700 transition-all duration-300 rounded-full text-sm" onClick={() => setIsSpeedEmotionOpen(true)}>
+            <Settings className="mr-1 h-4 w-4" /> Speed/Emotion
           </Button>
         </div>
-        <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-400">
-          <div className="flex items-center space-x-4 mb-4 sm:mb-0">
-            <div className="flex items-center space-x-2">
-              <RefreshCw size={16} />
+        <div className="flex justify-between items-center text-xs text-gray-400">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-1">
+              <RefreshCw size={12} />
               <span>{latency}ms</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+            <div className="flex items-center space-x-1">
+              <div className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
               <span>{isConnected ? 'Connected' : 'Disconnected'}</span>
             </div>
           </div>
-          <Button variant="ghost" onClick={handleDownload} className="text-gray-400 hover:text-white transition-all duration-300">
-            <Download size={16} className="mr-2" />
+          <Button variant="ghost" onClick={handleDownload} className="text-gray-400 hover:text-white transition-all duration-300 text-xs">
+            <Download size={12} className="mr-1" />
             <span>Download</span>
           </Button>
         </div>
