@@ -22,7 +22,7 @@ const AudioHistory = ({ history, onDelete }) => {
           <div key={index} className="group relative bg-gray-50 p-4 rounded-lg transition-all hover:bg-gray-100 shadow-sm">
             <div className="mb-2 flex justify-between items-center">
               <h3 className="text-lg font-semibold text-gray-900">{item.voice}</h3>
-              <div className="flex space-x-1">
+              <div className="hidden group-hover:flex space-x-1">
                 <Button variant="ghost" size="icon" className="text-green-600 hover:text-green-700">
                   <Play size={18} />
                 </Button>
@@ -41,7 +41,7 @@ const AudioHistory = ({ history, onDelete }) => {
             </div>
             <p className="text-sm text-gray-700 mb-2">{item.text}</p>
             {item.speedEmotion && (
-              <div className="mb-2">
+              <div className="hidden group-hover:block mb-2">
                 <Badge variant="outline" className="mr-2">
                   Speed: {item.speedEmotion.speed}
                 </Badge>
@@ -49,7 +49,7 @@ const AudioHistory = ({ history, onDelete }) => {
               </div>
             )}
             {item.mixedVoices && (
-              <div className="text-xs text-purple-600 mt-2">
+              <div className="hidden group-hover:block text-xs text-purple-600 mt-2">
                 Mixed: {item.mixedVoices.map(v => `${v.name} (${v.percentage}%)`).join(', ')}
               </div>
             )}
