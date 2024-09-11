@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Check } from 'lucide-react';
@@ -9,15 +9,8 @@ const models = [
 ];
 
 const ModelSelector = ({ model, setModel }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleModelChange = (modelId) => {
-    setModel(modelId);
-    setIsOpen(false);
-  };
-
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
+    <Popover>
       <PopoverTrigger asChild>
         <Button variant="ghost" className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent hover:from-blue-500 hover:to-purple-600">
           {models.find(m => m.id === model)?.name || 'Select Model'}
@@ -30,7 +23,7 @@ const ModelSelector = ({ model, setModel }) => {
               key={m.id}
               className="w-full justify-start rounded-none text-left font-normal"
               variant={m.id === model ? 'secondary' : 'ghost'}
-              onClick={() => handleModelChange(m.id)}
+              onClick={() => setModel(m.id)}
             >
               {m.id === model && <Check className="mr-2 h-4 w-4" />}
               {m.name}

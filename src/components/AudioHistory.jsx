@@ -5,10 +5,10 @@ import { Play, Download } from 'lucide-react';
 
 const AudioHistory = ({ history }) => {
   return (
-    <ScrollArea className="h-full">
+    <ScrollArea className="h-full bg-gray-800">
       <div className="space-y-4 p-4">
         {history.map((item, index) => (
-          <div key={index} className="group flex items-center space-x-2 bg-gray-800 p-2 rounded-lg">
+          <div key={index} className="group flex items-center space-x-2 bg-gray-700 p-2 rounded-lg">
             <div className="flex-grow">
               <p className="text-sm font-medium text-gray-200">{item.voice}</p>
               <p className="text-xs text-gray-400 truncate">{item.text}</p>

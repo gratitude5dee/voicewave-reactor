@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Card, CardContent } from "@/components/ui/card";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import VoiceCloner from './VoiceCloner';
 import AudioHistory from './AudioHistory';
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import HeaderBar from './HeaderBar';
 
 const VoiceClonerCard = () => {
   const [audioHistory, setAudioHistory] = useState([
@@ -15,23 +15,18 @@ const VoiceClonerCard = () => {
   };
 
   return (
-    <ResizablePanelGroup direction="horizontal" className="min-h-screen">
-      <ResizablePanel defaultSize={30} minSize={20}>
-        <Card className="w-full h-full bg-gray-900 text-white shadow-xl rounded-none border-0">
-          <CardContent className="p-0">
-            <AudioHistory history={audioHistory} />
-          </CardContent>
-        </Card>
-      </ResizablePanel>
-      <ResizableHandle className="w-1 bg-gray-800" />
-      <ResizablePanel defaultSize={70} minSize={50}>
-        <Card className="w-full h-full bg-gray-900 text-white shadow-xl rounded-none border-0">
-          <CardContent className="p-0">
-            <VoiceCloner onNewAudio={handleNewAudio} />
-          </CardContent>
-        </Card>
-      </ResizablePanel>
-    </ResizablePanelGroup>
+    <div className="flex flex-col h-screen w-screen bg-gray-900 text-white">
+      <HeaderBar />
+      <ResizablePanelGroup direction="horizontal" className="flex-grow">
+        <ResizablePanel defaultSize={30} minSize={20}>
+          <AudioHistory history={audioHistory} />
+        </ResizablePanel>
+        <ResizableHandle className="w-1 bg-gray-700" />
+        <ResizablePanel defaultSize={70} minSize={50}>
+          <VoiceCloner onNewAudio={handleNewAudio} />
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </div>
   );
 };
 
