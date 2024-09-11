@@ -12,7 +12,7 @@ import CloneVoicePopup from './CloneVoicePopup';
 import AudioReactiveSphere from './AudioReactiveSphere';
 import ModelSelector from './ModelSelector';
 
-const VoiceCloner = ({ onNewAudio }) => {
+const VoiceCloner = ({ onNewAudio, voices }) => {
   const [text, setText] = useState('');
   const [voice, setVoice] = useState('Aiden');
   const [model, setModel] = useState('sonic-english');
@@ -22,10 +22,11 @@ const VoiceCloner = ({ onNewAudio }) => {
   const [isSpeedEmotionOpen, setIsSpeedEmotionOpen] = useState(false);
   const [isMixVoicesOpen, setIsMixVoicesOpen] = useState(false);
   const [isCloneVoiceOpen, setIsCloneVoiceOpen] = useState(false);
+  const [speedEmotion, setSpeedEmotion] = useState(null);
   const bottomPanelRef = useRef(null);
 
   const handleSpeak = () => {
-    onNewAudio(voice, text);
+    onNewAudio(voice, text, speedEmotion);
   };
 
   const handleDownload = () => {
@@ -101,10 +102,9 @@ const VoiceCloner = ({ onNewAudio }) => {
                 <SelectValue placeholder="Select a voice" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Aiden">Aiden</SelectItem>
-                <SelectItem value="Emma">Emma</SelectItem>
-                <SelectItem value="Liam">Liam</SelectItem>
-                <SelectItem value="Olivia">Olivia</SelectItem>
+                {voices.map((v) => (
+                  <SelectItem key={v} value={v}>{v}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <Input
@@ -151,8 +151,16 @@ const VoiceCloner = ({ onNewAudio }) => {
           </div>
         </div>
       </ResizablePanel>
-      <SpeedEmotionPopup isOpen={isSpeedEmotionOpen} onClose={() => setIsSpeedEmotionOpen(false)} />
-      <MixVoicesPopup isOpen={isMixVoicesOpen} onClose={() => setIsMixVoicesOpen(false)} />
+      <SpeedEmotionPopup 
+        isOpen={isSpeedEmotionOpen} 
+        onClose={() => setIsSpeedEmotionOpen(false)} 
+        onSave={setSpeedEmotion}
+      />
+      <MixVoicesPopup 
+        isOpen={isMixVoicesOpen} 
+        onClose={() => setIsMixVoicesOpen(false)} 
+        voices={voices}
+      />
       <CloneVoicePopup isOpen={isCloneVoiceOpen} onClose={() => setIsCloneVoiceOpen(false)} />
     </ResizablePanelGroup>
   );

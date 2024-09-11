@@ -10,9 +10,14 @@ const VoiceClonerCard = () => {
     { voice: 'Emma', text: 'This is a sample audio history.' },
   ]);
   const [isMinimized, setIsMinimized] = useState(false);
+  const [voices, setVoices] = useState(['Aiden', 'Emma', 'Liam', 'Olivia']);
 
-  const handleNewAudio = (voice, text) => {
-    setAudioHistory(prev => [...prev, { voice, text }]);
+  const handleNewAudio = (voice, text, speedEmotion) => {
+    setAudioHistory(prev => [...prev, { voice, text, speedEmotion }]);
+  };
+
+  const handleDeleteAudio = (index) => {
+    setAudioHistory(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleMinimize = () => {
@@ -25,11 +30,11 @@ const VoiceClonerCard = () => {
       {!isMinimized && (
         <ResizablePanelGroup direction="horizontal" className="flex-grow">
           <ResizablePanel defaultSize={30} minSize={20}>
-            <AudioHistory history={audioHistory} />
+            <AudioHistory history={audioHistory} onDelete={handleDeleteAudio} />
           </ResizablePanel>
           <ResizableHandle className="w-px bg-gray-200" />
           <ResizablePanel defaultSize={70} minSize={50}>
-            <VoiceCloner onNewAudio={handleNewAudio} />
+            <VoiceCloner onNewAudio={handleNewAudio} voices={voices} />
           </ResizablePanel>
         </ResizablePanelGroup>
       )}

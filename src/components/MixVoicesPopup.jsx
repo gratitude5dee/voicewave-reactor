@@ -6,35 +6,35 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2, ChevronUp, ChevronDown } from 'lucide-react';
 
-const MixVoicesPopup = ({ isOpen, onClose }) => {
+const MixVoicesPopup = ({ isOpen, onClose, voices }) => {
   const [isMixingEnabled, setIsMixingEnabled] = useState(false);
-  const [voices, setVoices] = useState([
+  const [mixedVoices, setMixedVoices] = useState([
     { id: 1, name: '', percentage: 50 },
     { id: 2, name: '', percentage: 50 },
   ]);
 
   const handleAddVoice = () => {
-    if (voices.length < 5) {
-      setVoices([...voices, { id: Date.now(), name: '', percentage: 50 }]);
+    if (mixedVoices.length < 5) {
+      setMixedVoices([...mixedVoices, { id: Date.now(), name: '', percentage: 50 }]);
     }
   };
 
   const handleRemoveVoice = (id) => {
-    setVoices(voices.filter(voice => voice.id !== id));
+    setMixedVoices(mixedVoices.filter(voice => voice.id !== id));
   };
 
   const handleVoiceChange = (id, field, value) => {
-    setVoices(voices.map(voice => 
+    setMixedVoices(mixedVoices.map(voice => 
       voice.id === id ? { ...voice, [field]: value } : voice
     ));
   };
 
   const handleMoveVoice = (index, direction) => {
-    const newVoices = [...voices];
+    const newVoices = [...mixedVoices];
     const temp = newVoices[index];
     newVoices[index] = newVoices[index + direction];
     newVoices[index + direction] = temp;
-    setVoices(newVoices);
+    setMixedVoices(newVoices);
   };
 
   return (
@@ -51,7 +51,7 @@ const MixVoicesPopup = ({ isOpen, onClose }) => {
           <p className="text-sm text-gray-500">
             Use mixing to create a new voice that resembles the selected source voices.
           </p>
-          {voices.map((voice, index) => (
+          {mixedVoices.map((voice, index) => (
             <div key={voice.id} className="space-y-2">
               <div className="flex items-center space-x-2">
                 <Select value={voice.name} onValueChange={(value) => handleVoiceChange(voice.id, 'name', value)}>
@@ -59,9 +59,9 @@ const MixVoicesPopup = ({ isOpen, onClose }) => {
                     <SelectValue placeholder="Pick a voice" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="voice1">Voice 1</SelectItem>
-                    <SelectItem value="voice2">Voice 2</SelectItem>
-                    <SelectItem value="voice3">Voice 3</SelectItem>
+                    {voices.map((v) => (
+                      <SelectItem key={v} value={v}>{v}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <Slider
@@ -81,7 +81,7 @@ const MixVoicesPopup = ({ isOpen, onClose }) => {
                     <ChevronUp className="h-4 w-4" />
                   </Button>
                 )}
-                {index < voices.length - 1 && (
+                {index < mixedVoices.length - 1 && (
                   <Button variant="ghost" size="icon" onClick={() => handleMoveVoice(index, 1)}>
                     <ChevronDown className="h-4 w-4" />
                   </Button>
@@ -89,7 +89,7 @@ const MixVoicesPopup = ({ isOpen, onClose }) => {
               </div>
             </div>
           ))}
-          {voices.length < 5 && (
+          {mixedVoices.length < 5 && (
             <Button onClick={handleAddVoice} className="mt-2">
               Add to mix
             </Button>
