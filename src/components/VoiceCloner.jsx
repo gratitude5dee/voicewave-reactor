@@ -56,7 +56,11 @@ const VoiceCloner = ({ onNewAudio }) => {
     const currentBottomPanel = bottomPanelRef.current;
 
     if (currentBottomPanel) {
-      resizeObserver = new ResizeObserver(resizeObserverCallback);
+      resizeObserver = new ResizeObserver((entries) => {
+        window.requestAnimationFrame(() => {
+          resizeObserverCallback(entries);
+        });
+      });
       resizeObserver.observe(currentBottomPanel);
     }
 
