@@ -1,10 +1,10 @@
 import React from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Play, Download, X } from 'lucide-react';
+import { Play, Download, X, Star } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-const AudioHistory = ({ history, onDelete }) => {
+const AudioHistory = ({ history, onDelete, favorites, onToggleFavorite }) => {
   const formatEmotions = (emotions) => {
     return Object.entries(emotions)
       .filter(([_, value]) => value > 0)
@@ -28,6 +28,14 @@ const AudioHistory = ({ history, onDelete }) => {
                 </Button>
                 <Button variant="ghost" size="icon" className="text-blue-600 hover:text-blue-700">
                   <Download size={18} />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={() => onToggleFavorite(item.voice)}
+                  className={`${favorites.includes(item.voice) ? 'text-yellow-500' : 'text-gray-400'} hover:text-yellow-600`}
+                >
+                  <Star size={18} />
                 </Button>
                 <Button 
                   variant="ghost" 

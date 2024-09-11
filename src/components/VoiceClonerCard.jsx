@@ -7,7 +7,7 @@ import CloneVoicePopup from './CloneVoicePopup';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Search, Star, Trash2 } from 'lucide-react';
+import { Search, Trash2 } from 'lucide-react';
 
 const VoiceClonerCard = () => {
   const [audioHistory, setAudioHistory] = useState([
@@ -45,10 +45,6 @@ const VoiceClonerCard = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredVoices = voices.filter(voice =>
-    voice.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   const toggleFavorite = (voiceName) => {
     setFavorites(prev =>
       prev.includes(voiceName)
@@ -61,6 +57,11 @@ const VoiceClonerCard = () => {
     setAudioHistory([]);
   };
 
+  const filteredHistory = audioHistory.filter(item =>
+    item.text.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.voice.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className={`flex flex-col bg-white rounded-lg shadow-lg overflow-hidden ${isMinimized ? 'h-12' : 'h-screen'} transition-all duration-300 ease-in-out`}>
       <HeaderBar onMinimize={handleMinimize} isMinimized={isMinimized} />
@@ -71,7 +72,7 @@ const VoiceClonerCard = () => {
               <div className="p-4 border-b">
                 <Input
                   type="text"
-                  placeholder="Search voices..."
+                  placeholder="Search voices and history..."
                   value={searchTerm}
                   onChange={handleSearch}
                   className="mb-2"
@@ -98,7 +99,7 @@ const VoiceClonerCard = () => {
                 </AlertDialog>
               </div>
               <AudioHistory
-                history={audioHistory}
+                history={filteredHistory}
                 onDelete={handleDeleteAudio}
                 favorites={favorites}
                 onToggleFavorite={toggleFavorite}
@@ -109,7 +110,7 @@ const VoiceClonerCard = () => {
           <ResizablePanel defaultSize={70} minSize={50}>
             <VoiceCloner 
               onNewAudio={handleNewAudio} 
-              voices={filteredVoices}
+              voices={voices}
               favorites={favorites}
               onToggleFavorite={toggleFavorite}
               onCloneVoice={() => setIsCloneVoiceOpen(true)}
