@@ -3,6 +3,7 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/componen
 import VoiceCloner from './VoiceCloner';
 import AudioHistory from './AudioHistory';
 import HeaderBar from './HeaderBar';
+import CloneVoicePopup from './CloneVoicePopup';
 
 const VoiceClonerCard = () => {
   const [audioHistory, setAudioHistory] = useState([
@@ -11,6 +12,7 @@ const VoiceClonerCard = () => {
   ]);
   const [isMinimized, setIsMinimized] = useState(false);
   const [voices, setVoices] = useState(['Aiden', 'Emma', 'Liam', 'Olivia']);
+  const [isCloneVoiceOpen, setIsCloneVoiceOpen] = useState(false);
 
   const handleNewAudio = (voice, text, speedEmotion, mixedVoices) => {
     setAudioHistory(prev => [...prev, { voice, text, speedEmotion, mixedVoices }]);
@@ -24,6 +26,10 @@ const VoiceClonerCard = () => {
     setIsMinimized(!isMinimized);
   };
 
+  const handleAddVoice = (newVoice) => {
+    setVoices(prev => [...prev, newVoice]);
+  };
+
   return (
     <div className={`flex flex-col bg-white rounded-lg shadow-lg overflow-hidden ${isMinimized ? 'h-12' : 'h-screen'} transition-all duration-300 ease-in-out`}>
       <HeaderBar onMinimize={handleMinimize} isMinimized={isMinimized} />
@@ -34,10 +40,19 @@ const VoiceClonerCard = () => {
           </ResizablePanel>
           <ResizableHandle className="w-px bg-gray-200" />
           <ResizablePanel defaultSize={70} minSize={50}>
-            <VoiceCloner onNewAudio={handleNewAudio} voices={voices} />
+            <VoiceCloner 
+              onNewAudio={handleNewAudio} 
+              voices={voices} 
+              onCloneVoice={() => setIsCloneVoiceOpen(true)}
+            />
           </ResizablePanel>
         </ResizablePanelGroup>
       )}
+      <CloneVoicePopup 
+        isOpen={isCloneVoiceOpen} 
+        onClose={() => setIsCloneVoiceOpen(false)} 
+        onSave={handleAddVoice}
+      />
     </div>
   );
 };

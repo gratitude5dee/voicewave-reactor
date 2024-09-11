@@ -8,11 +8,10 @@ import { RefreshCw, Download, Mic, Settings } from 'lucide-react';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import SpeedEmotionPopup from './SpeedEmotionPopup';
 import MixVoicesPopup from './MixVoicesPopup';
-import CloneVoicePopup from './CloneVoicePopup';
 import AudioReactiveSphere from './AudioReactiveSphere';
 import ModelSelector from './ModelSelector';
 
-const VoiceCloner = ({ onNewAudio, voices = [] }) => {
+const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice }) => {
   const [text, setText] = useState('');
   const [voice, setVoice] = useState('');
   const [model, setModel] = useState('sonic-english');
@@ -21,7 +20,6 @@ const VoiceCloner = ({ onNewAudio, voices = [] }) => {
   const [isConnected, setIsConnected] = useState(true);
   const [isSpeedEmotionOpen, setIsSpeedEmotionOpen] = useState(false);
   const [isMixVoicesOpen, setIsMixVoicesOpen] = useState(false);
-  const [isCloneVoiceOpen, setIsCloneVoiceOpen] = useState(false);
   const [speedEmotion, setSpeedEmotion] = useState(null);
   const [mixedVoices, setMixedVoices] = useState(null);
   const bottomPanelRef = useRef(null);
@@ -104,7 +102,7 @@ const VoiceCloner = ({ onNewAudio, voices = [] }) => {
           <div className="flex justify-between items-center">
             <ModelSelector model={model} setModel={setModel} />
             <Button
-              onClick={() => setIsCloneVoiceOpen(true)}
+              onClick={onCloneVoice}
               variant="outline"
               className="text-purple-600 border-purple-600 hover:bg-purple-50 rounded-full"
             >
@@ -182,7 +180,6 @@ const VoiceCloner = ({ onNewAudio, voices = [] }) => {
         onSave={handleMixVoices}
         initialMixedVoices={mixedVoices}
       />
-      <CloneVoicePopup isOpen={isCloneVoiceOpen} onClose={() => setIsCloneVoiceOpen(false)} />
     </ResizablePanelGroup>
   );
 };
