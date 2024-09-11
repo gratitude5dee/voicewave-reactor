@@ -47,13 +47,14 @@ const VoiceCloner = ({ onNewAudio }) => {
       }
     });
 
-    if (bottomPanelRef.current) {
-      resizeObserver.observe(bottomPanelRef.current);
+    const currentBottomPanel = bottomPanelRef.current;
+    if (currentBottomPanel) {
+      resizeObserver.observe(currentBottomPanel);
     }
 
     return () => {
-      if (bottomPanelRef.current) {
-        resizeObserver.unobserve(bottomPanelRef.current);
+      if (currentBottomPanel) {
+        resizeObserver.unobserve(currentBottomPanel);
       }
     };
   }, []);
@@ -69,8 +70,8 @@ const VoiceCloner = ({ onNewAudio }) => {
         </Canvas>
       </ResizablePanel>
       <ResizableHandle className="h-px bg-gray-200" />
-      <ResizablePanel defaultSize={50} minSize={30} ref={bottomPanelRef}>
-        <div className="p-6 space-y-6 h-full flex flex-col bg-white rounded-lg shadow-lg">
+      <ResizablePanel defaultSize={50} minSize={30}>
+        <div ref={bottomPanelRef} className="p-6 space-y-6 h-full flex flex-col bg-white rounded-lg shadow-lg">
           <div className="flex justify-between items-center">
             <ModelSelector model={model} setModel={setModel} />
             <Button
