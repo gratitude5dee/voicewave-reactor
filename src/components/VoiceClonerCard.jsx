@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import VoiceCloner from './VoiceCloner';
 import AudioHistory from './AudioHistory';
 import HeaderBar from './HeaderBar';
 import CloneVoicePopup from './CloneVoicePopup';
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Search, Star, Trash2 } from 'lucide-react';
 
 const VoiceClonerCard = () => {
   const [audioHistory, setAudioHistory] = useState([
@@ -11,8 +15,15 @@ const VoiceClonerCard = () => {
     { voice: 'Emma', text: 'This is a sample audio history.' },
   ]);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [voices, setVoices] = useState(['Aiden', 'Emma', 'Liam', 'Olivia']);
+  const [voices, setVoices] = useState([
+    { name: 'Aiden', category: 'Male' },
+    { name: 'Emma', category: 'Female' },
+    { name: 'Liam', category: 'Male' },
+    { name: 'Olivia', category: 'Female' },
+  ]);
   const [isCloneVoiceOpen, setIsCloneVoiceOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [favorites, setFavorites] = useState([]);
 
   const handleNewAudio = (voice, text, speedEmotion, mixedVoices) => {
     setAudioHistory(prev => [...prev, { voice, text, speedEmotion, mixedVoices }]);
@@ -27,7 +38,27 @@ const VoiceClonerCard = () => {
   };
 
   const handleAddVoice = (newVoice) => {
-    setVoices(prev => [...prev, newVoice]);
+    setVoices(prev => [...prev, { name: newVoice, category: 'Custom' }]);
+  };
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredVoices = voices.filter(voice =>
+    voice.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const toggleFavorite = (voiceName) => {
+    setFavorites(prev =>
+      prev.includes(voiceName)
+        ? prev.filter(name => name !== voiceName)
+        : [...prev, voiceName]
+    );
+  };
+
+  const clearHistory = () => {
+    setAudioHistory([]);
   };
 
   return (
@@ -36,13 +67,51 @@ const VoiceClonerCard = () => {
       {!isMinimized && (
         <ResizablePanelGroup direction="horizontal" className="flex-grow">
           <ResizablePanel defaultSize={30} minSize={20}>
-            <AudioHistory history={audioHistory} onDelete={handleDeleteAudio} />
+            <div className="flex flex-col h-full">
+              <div className="p-4 border-b">
+                <Input
+                  type="text"
+                  placeholder="Search voices..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  className="mb-2"
+                  startAdornment={<Search className="text-gray-400" />}
+                />
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="outline" className="w-full">
+                      <Trash2 className="mr-2 h-4 w-4" /> Clear History
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your audio history.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={clearHistory}>Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+              <AudioHistory
+                history={audioHistory}
+                onDelete={handleDeleteAudio}
+                favorites={favorites}
+                onToggleFavorite={toggleFavorite}
+              />
+            </div>
           </ResizablePanel>
           <ResizableHandle className="w-px bg-gray-200" />
           <ResizablePanel defaultSize={70} minSize={50}>
             <VoiceCloner 
               onNewAudio={handleNewAudio} 
-              voices={voices} 
+              voices={filteredVoices}
+              favorites={favorites}
+              onToggleFavorite={toggleFavorite}
               onCloneVoice={() => setIsCloneVoiceOpen(true)}
             />
           </ResizablePanel>
