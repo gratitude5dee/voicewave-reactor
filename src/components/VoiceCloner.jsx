@@ -24,33 +24,40 @@ const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice, model, setModel })
     audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
     analyserRef.current = audioContextRef.current.createAnalyser();
     analyserRef.current.fftSize = 256;
+    return () => {
+      if (audioContextRef.current.state !== 'closed') {
+        audioContextRef.current.close();
+      }
+    };
   }, []);
 
   const handleSpeak = async (voice, text) => {
     if (voice && text) {
-      // Simulate audio generation (replace with actual API call)
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
+      if (audioContextRef.current.state === 'suspended') {
+        await audioContextRef.current.resume();
+      }
+
+      if (sourceRef.current) {
+        sourceRef.current.disconnect();
+      }
+
+      const oscillator = audioContextRef.current.createOscillator();
       oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // A4 note
+      oscillator.frequency.setValueAtTime(440, audioContextRef.current.currentTime); // A4 note
       
-      const gainNode = audioContext.createGain();
-      gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+      const gainNode = audioContextRef.current.createGain();
+      gainNode.gain.setValueAtTime(0.5, audioContextRef.current.currentTime);
       
       oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
+      gainNode.connect(audioContextRef.current.destination);
       
       oscillator.start();
       setTimeout(() => {
         oscillator.stop();
       }, 2000); // Stop after 2 seconds
 
-      if (sourceRef.current) {
-        sourceRef.current.disconnect();
-      }
       sourceRef.current = oscillator;
       sourceRef.current.connect(analyserRef.current);
-      analyserRef.current.connect(audioContextRef.current.destination);
 
       onNewAudio(voice, text, speedEmotion, mixedVoices);
       startVisualization();
