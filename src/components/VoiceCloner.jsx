@@ -4,7 +4,7 @@ import { OrbitControls } from '@react-three/drei';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { RefreshCw, Download, Mic, Settings, Plus } from 'lucide-react';
+import { RefreshCw, Download, Mic, Settings } from 'lucide-react';
 import SpeedEmotionPopup from './SpeedEmotionPopup';
 import MixVoicesPopup from './MixVoicesPopup';
 import CloneVoicePopup from './CloneVoicePopup';
@@ -31,8 +31,8 @@ const VoiceCloner = ({ onNewAudio }) => {
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="h-1/2 bg-black rounded-t-xl overflow-hidden relative">
+    <div className="flex flex-col h-full bg-gray-900">
+      <div className="h-1/3 bg-black rounded-t-xl overflow-hidden relative">
         <Canvas camera={{ position: [0, 0, 5] }}>
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
@@ -40,7 +40,7 @@ const VoiceCloner = ({ onNewAudio }) => {
           <OrbitControls />
         </Canvas>
       </div>
-      <div className="p-6 space-y-6 flex-grow bg-gray-900">
+      <div className="p-6 space-y-6 flex-grow">
         <div className="flex justify-between items-center">
           <ModelSelector model={model} setModel={setModel} />
           <Button
@@ -48,7 +48,7 @@ const VoiceCloner = ({ onNewAudio }) => {
             variant="outline"
             className="text-purple-400 border-purple-400 hover:bg-purple-400 hover:text-white rounded-full"
           >
-            <Plus className="mr-2 h-4 w-4" /> Clone Voice
+            + Clone Voice
           </Button>
         </div>
         <div className="flex space-x-2">
@@ -67,7 +67,7 @@ const VoiceCloner = ({ onNewAudio }) => {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Enter text to speak"
-            className="flex-grow bg-gray-800 border-gray-700 text-white"
+            className="flex-grow bg-gray-800 border-gray-700 text-gray-300 placeholder-gray-500"
           />
           <Button onClick={handleSpeak} className="bg-purple-600 hover:bg-purple-700">
             <Mic className="mr-2 h-4 w-4" /> Speak
