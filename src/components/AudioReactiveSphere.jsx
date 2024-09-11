@@ -2,7 +2,6 @@ import React, { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { shaderMaterial } from '@react-three/drei';
-import glsl from 'babel-plugin-glsl/macro';
 
 const AudioReactiveShaderMaterial = shaderMaterial(
   {
@@ -10,14 +9,16 @@ const AudioReactiveShaderMaterial = shaderMaterial(
     uAudioData: new Float32Array(128),
     uColor: new THREE.Color(0x4a9ff5),
   },
-  glsl`
+  // Vertex Shader
+  `
     varying vec2 vUv;
     void main() {
       vUv = uv;
       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
     }
   `,
-  glsl`
+  // Fragment Shader
+  `
     uniform float uTime;
     uniform float uAudioData[128];
     uniform vec3 uColor;
