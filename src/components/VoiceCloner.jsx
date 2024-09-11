@@ -12,9 +12,9 @@ import CloneVoicePopup from './CloneVoicePopup';
 import AudioReactiveSphere from './AudioReactiveSphere';
 import ModelSelector from './ModelSelector';
 
-const VoiceCloner = ({ onNewAudio, voices }) => {
+const VoiceCloner = ({ onNewAudio, voices = [] }) => {
   const [text, setText] = useState('');
-  const [voice, setVoice] = useState('Aiden');
+  const [voice, setVoice] = useState('');
   const [model, setModel] = useState('sonic-english');
   const [audioData, setAudioData] = useState(new Uint8Array(128));
   const [latency, setLatency] = useState(99);
@@ -25,12 +25,21 @@ const VoiceCloner = ({ onNewAudio, voices }) => {
   const [speedEmotion, setSpeedEmotion] = useState(null);
   const bottomPanelRef = useRef(null);
 
+  useEffect(() => {
+    if (voices.length > 0 && !voice) {
+      setVoice(voices[0]);
+    }
+  }, [voices, voice]);
+
   const handleSpeak = () => {
-    onNewAudio(voice, text, speedEmotion);
+    if (voice && text) {
+      onNewAudio(voice, text, speedEmotion);
+    }
   };
 
   const handleDownload = () => {
     // Implement download functionality
+    console.log('Download functionality not implemented yet');
   };
 
   const resizeObserverCallback = useCallback((entries) => {
@@ -102,9 +111,13 @@ const VoiceCloner = ({ onNewAudio, voices }) => {
                 <SelectValue placeholder="Select a voice" />
               </SelectTrigger>
               <SelectContent>
-                {voices.map((v) => (
-                  <SelectItem key={v} value={v}>{v}</SelectItem>
-                ))}
+                {voices.length > 0 ? (
+                  voices.map((v) => (
+                    <SelectItem key={v} value={v}>{v}</SelectItem>
+                  ))
+                ) : (
+                  <SelectItem value="" disabled>No voices available</SelectItem>
+                )}
               </SelectContent>
             </Select>
             <Input
@@ -113,7 +126,7 @@ const VoiceCloner = ({ onNewAudio, voices }) => {
               placeholder="Enter text to speak"
               className="flex-grow bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400"
             />
-            <Button onClick={handleSpeak} className="bg-purple-600 hover:bg-purple-700 text-white">
+            <Button onClick={handleSpeak} className="bg-purple-600 hover:bg-purple-700 text-white" disabled={!voice || !text}>
               <Mic className="mr-2 h-4 w-4" /> Speak
             </Button>
           </div>
