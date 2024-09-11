@@ -10,7 +10,7 @@ import CloneVoicePopup from './CloneVoicePopup';
 import AudioReactiveSphere from './AudioReactiveSphere';
 import ModelSelector from './ModelSelector';
 
-const VoiceCloner = () => {
+const VoiceCloner = ({ onNewAudio }) => {
   const [text, setText] = useState('');
   const [voice, setVoice] = useState('Aiden');
   const [model, setModel] = useState('sonic-english');
@@ -23,6 +23,7 @@ const VoiceCloner = () => {
 
   const handleSpeak = () => {
     // Implement speak functionality
+    onNewAudio(voice, text);
   };
 
   const handleDownload = () => {
@@ -64,14 +65,14 @@ const VoiceCloner = () => {
         <div className="flex space-x-2">
           <Button 
             variant="outline" 
-            className="flex-grow bg-blue-600 hover:bg-blue-700 text-white border-blue-600" 
+            className="flex-grow bg-amber-600 hover:bg-amber-700 text-white border-amber-600" 
             onClick={() => setIsMixVoicesOpen(true)}
           >
             Mix Voices
           </Button>
           <Button 
             variant="outline" 
-            className="flex-grow bg-green-600 hover:bg-green-700 text-white border-green-600" 
+            className="flex-grow bg-teal-600 hover:bg-teal-700 text-white border-teal-600" 
             onClick={() => setIsSpeedEmotionOpen(true)}
           >
             <Settings className="mr-2 h-4 w-4" /> Speed/Emotion
