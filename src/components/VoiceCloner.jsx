@@ -26,7 +26,7 @@ const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice }) => {
 
   useEffect(() => {
     if (voices.length > 0 && !voice) {
-      setVoice(voices[0]);
+      setVoice(voices[0].name);
     }
   }, [voices, voice]);
 
@@ -117,7 +117,7 @@ const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice }) => {
               <SelectContent>
                 {voices.length > 0 ? (
                   voices.map((v) => (
-                    <SelectItem key={v} value={v}>{v}</SelectItem>
+                    <SelectItem key={v.name} value={v.name}>{v.name}</SelectItem>
                   ))
                 ) : (
                   <SelectItem value="" disabled>No voices available</SelectItem>
@@ -176,7 +176,7 @@ const VoiceCloner = ({ onNewAudio, voices = [], onCloneVoice }) => {
       <MixVoicesPopup 
         isOpen={isMixVoicesOpen} 
         onClose={() => setIsMixVoicesOpen(false)} 
-        voices={voices}
+        voices={voices.map(v => v.name)}
         onSave={handleMixVoices}
         initialMixedVoices={mixedVoices}
       />
