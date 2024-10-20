@@ -1,98 +1,70 @@
 import React, { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { extend } from '@react-three/fiber';
-
-class AudioReactiveShaderMaterial extends THREE.ShaderMaterial {
-  constructor() {
-    super({
-      uniforms: {
-        uTime: { value: 0 },
-        uAudioData: { value: new Float32Array(128) },
-        uColor: { value: new THREE.Color(0x4a9ff5) },
-      },
-      vertexShader: `
-        varying vec2 vUv;
-        uniform float uTime;
-        uniform float uAudioData[128];
-
-        void main() {
-          vUv = uv;
-          vec3 newPosition = position;
-          float audioInfluence = 0.0;
-          for (int i = 0; i < 128; i++) {
-            audioInfluence += uAudioData[i] * 0.01;
-          }
-          newPosition += normal * audioInfluence;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform float uTime;
-        uniform float uAudioData[128];
-        uniform vec3 uColor;
-        varying vec2 vUv;
-
-        void main() {
-          float audioInfluence = 0.0;
-          for (int i = 0; i < 128; i++) {
-            audioInfluence += uAudioData[i] * 0.01;
-          }
-
-          vec3 color = uColor + vec3(sin(uTime * 0.5) * 0.2, cos(uTime * 0.3) * 0.2, sin(uTime * 0.7) * 0.2);
-          float glow = sin(uTime * 2.0 + vUv.x * 10.0 + vUv.y * 10.0) * 0.5 + 0.5;
-          color += vec3(glow * 0.3 * (1.0 + audioInfluence));
-
-          gl_FragColor = vec4(color, 1.0);
-        }
-      `,
-    });
-  }
-}
-
-extend({ AudioReactiveShaderMaterial });
 
 const AudioReactiveSphere = ({ audioData }) => {
   const meshRef = useRef();
-  const materialRef = useRef();
+  const particlesRef = useRef();
+  const particlesGeometryRef = useRef(new THREE.BufferGeometry());
 
-  const [positions, normals] = useMemo(() => {
-    const sphereGeometry = new THREE.SphereGeometry(1, 64, 64);
-    return [
-      sphereGeometry.attributes.position.array,
-      sphereGeometry.attributes.normal.array,
-    ];
+  const particlesCount = 3000;
+  const positions = useMemo(() => {
+    const positions = new Float32Array(particlesCount * 3);
+    for (let i = 0; i < particlesCount; i++) {
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(Math.random() * 2 - 1);
+      const radius = 1 + Math.random() * 0.5;
+      positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+      positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+      positions[i * 3 + 2] = radius * Math.cos(phi);
+    }
+    return positions;
   }, []);
 
-  useFrame((state) => {
-    if (meshRef.current && materialRef.current) {
-      const time = state.clock.getElapsedTime();
-      materialRef.current.uniforms.uTime.value = time;
-      materialRef.current.uniforms.uAudioData.value = audioData;
+  useEffect(() => {
+    if (particlesGeometryRef.current) {
+      particlesGeometryRef.current.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    }
+  }, [positions]);
 
-      const scale = 1 + (audioData.reduce((a, b) => a + b, 0) / audioData.length) * 0.01;
+  useFrame((state) => {
+    if (audioData && meshRef.current && particlesGeometryRef.current) {
+      const time = state.clock.getElapsedTime();
+      const average = audioData.reduce((a, b) => a + b, 0) / audioData.length;
+      const scale = 1 + average / 256;
       meshRef.current.scale.setScalar(scale);
+      meshRef.current.rotation.x = Math.sin(time * 0.5) * 0.2;
+      meshRef.current.rotation.y = Math.cos(time * 0.3) * 0.2;
+
+      const positionAttribute = particlesGeometryRef.current.getAttribute('position');
+      const positions = positionAttribute.array;
+
+      for (let i = 0; i < particlesCount; i++) {
+        const i3 = i * 3;
+        const x = positions[i3];
+        const y = positions[i3 + 1];
+        const z = positions[i3 + 2];
+        const distance = Math.sqrt(x * x + y * y + z * z);
+        const factor = 1 + (Math.sin(distance * 3 + time * 2 + average / 50) * 0.2);
+        positions[i3] *= factor;
+        positions[i3 + 1] *= factor;
+        positions[i3 + 2] *= factor;
+      }
+      positionAttribute.needsUpdate = true;
     }
   });
 
   return (
-    <mesh ref={meshRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attachObject={['attributes', 'position']}
-          count={positions.length / 3}
-          array={positions}
-          itemSize={3}
-        />
-        <bufferAttribute
-          attachObject={['attributes', 'normal']}
-          count={normals.length / 3}
-          array={normals}
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <audioReactiveShaderMaterial ref={materialRef} />
-    </mesh>
+    <group>
+      <mesh ref={meshRef}>
+        <sphereGeometry args={[1, 64, 64]} />
+        <meshPhongMaterial color="#4a9ff5" emissive="#4a9ff5" emissiveIntensity={0.5} shininess={50} />
+      </mesh>
+      <points ref={particlesRef}>
+        <primitive object={particlesGeometryRef.current} />
+        <pointsMaterial size={0.015} color="#ffffff" transparent opacity={0.6} />
+      </points>
+    </group>
   );
 };
 

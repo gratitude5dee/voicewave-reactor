@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Mic } from 'lucide-react';
 
-const CloneVoicePopup = ({ isOpen, onClose, onSave }) => {
+const CloneVoicePopup = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState('record');
   const [currentStep, setCurrentStep] = useState(1);
   const [isRecording, setIsRecording] = useState(false);
@@ -29,14 +29,9 @@ const CloneVoicePopup = ({ isOpen, onClose, onSave }) => {
   };
 
   const handleSave = () => {
-    onSave(name);
+    // Implement save logic here
+    console.log('Saving voice clone:', { name, description, language, agreed });
     onClose();
-    // Reset form
-    setName('');
-    setDescription('');
-    setLanguage('');
-    setAgreed(false);
-    setCurrentStep(1);
   };
 
   const handleNext = () => {
@@ -173,7 +168,7 @@ const CloneVoicePopup = ({ isOpen, onClose, onSave }) => {
               Next
             </Button>
           ) : (
-            <Button onClick={handleSave} className="ml-auto" disabled={!agreed || !name}>
+            <Button onClick={handleSave} className="ml-auto" disabled={!agreed}>
               Save
             </Button>
           )}
